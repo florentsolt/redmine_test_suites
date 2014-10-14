@@ -1,0 +1,35 @@
+<%= render :partial => 'show' %>
+
+<% content_for :sidebar do %>
+  <% if @execution %>
+    <h3>Suite</h3>
+    <p>#<%= @execution.suite.id %> <%= @execution.suite.title %></p>
+  <% end %>
+
+  <%= form_for @log, :url => {:action => :log, :id => @case.id} do |f| %>
+
+    <h3>Status</h3>
+      <%= f.hidden_field :status %>
+      <% TestLog::STATUS.each do |id, label| %>
+        <% next if id == 0 %>
+        <strong class='<%= label.parameterize %>' value="<%= id %>"><%= h label %></strong>
+      <% end %>
+
+    <h3>Comment</h3>
+      <p><%= f.text_area :comment %></p>
+      <%= wikitoolbar_for 'test_log_comment' %>
+
+    <%= f.submit "Submit" %>
+
+  <% end %>
+<% end %>
+
+<script>
+$(function () {
+  $('#sidebar strong').click(function() {
+    $('#sidebar strong').removeClass('selected');
+    $(this).addClass('selected');
+    $('#test_log_status').val($(this).attr('value'));
+  });
+});
+</script>

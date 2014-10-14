@@ -1,0 +1,7 @@
+$('#relations').html('<%= escape_javascript(render :partial => 'issues') %>');
+<% if not @issue.nil? %>
+  $('#issue_id').blur();
+  $('#issue_id').val('');
+  $('#issue_id').focus();
+<% end %>
+

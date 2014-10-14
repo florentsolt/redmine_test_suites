@@ -1,0 +1,11 @@
+<h2>Suite #<%= h @suite.id %></h2>
+
+<div class="issue details">
+  <div class="subject">
+    <h3><%= h @suite.title %></h3>
+    <p class="author">
+      <%= authoring @suite.created_at, @suite.user %>.
+    </p>
+  </div>
+</div>
+

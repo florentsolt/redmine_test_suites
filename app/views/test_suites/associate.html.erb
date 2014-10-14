@@ -1,0 +1,75 @@
+<div class="contextual">
+<%= link_to "View", {:action => :show}, :class => 'icon icon-show' %>
+</div>
+
+<%= render :partial => 'show' %>
+
+<div class="splitcontentleft cases" id="associated">
+  <table class="list">
+    <thead>
+      <tr>
+        <th colspan="2">Associated</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @suite.associations.any? %>
+        <% @suite.associations.each do |association| %>
+          <% if not association.case.nil? %>
+            <tr class="case" association="<%= association.id %>">
+              <td><%= link_to_case association.case %></td>
+              <td class="associate"><%= link_to "Dissociate", {:action => :dissociate, :id => @suite.id, :case => association.case.id}, :class => "icon icon-unlink" %></td>
+            </tr>
+          <% elsif not association.nested_suite.nil? %>
+            <tr class="suite" association="<%= association.id %>">
+              <td><%= link_to_suite association.nested_suite %></td>
+              <td class="associate"><%= link_to "Dissociate", {:action => :dissociate, :id => @suite.id, :suite => association.nested_suite.id}, :class => "icon icon-unlink" %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      <% else %>
+        <tr class="empty"><td colspan="2">No cases</td></tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="splitcontentright cases" id="available">
+  <%= searchable('available') %>
+  <%= render_tabs [
+  {:name => 'unused', :partial => 'associate', :label => :label_unused, :data => @available[:unused] || []},
+  {:name => 'used', :partial => 'associate', :label => :label_used, :data => @available[:used] || []},
+  {:name => 'suites', :partial => 'associate', :label => :label_suites, :data => @available[:suite] || []}
+] %>
+
+</div>
+
+<% content_for :sidebar do %>
+  <%= render :partial => 'tests/sidebar' %>
+<% end %>
+
+<script>
+$(function () {
+  $('#associated tbody').sortable({
+    items: 'tr',
+    cancel: '.open',
+    cursor: 'move',
+    distance: 30,
+    placeholder: 'placeholder',
+    start: function(event, ui) {
+      ui.placeholder.append('<td colspan="2"><span class="icon icon-placeholder">here...</span></td>');
+    },
+    stop: function(event, ui) {
+      var i, trs, cases = [];
+      trs = $('#associated tr.case');
+      for (i = 0; i < trs.length; i++) {
+        cases.push($(trs[i]).attr('association'));
+      }
+      console.log(cases);
+      $.post(
+        "<%= url_for :action => :associate %>",
+        {'order[]': cases}
+      );
+    }
+  }).disableSelection();
+});
+</script>

@@ -1,0 +1,43 @@
+<div class="contextual">
+  <%= link_to "Back to the suite", {:action => :show, :controller => :test_suites, :id => @execution.suite.id}, :class => 'icon icon-back' %>
+</div>
+
+<h2>Suite #<%= h @execution.suite.id %></h2>
+
+<div class="issue details">
+  <div class="subject">
+    <h3>Execution #<%= @execution.id %></h3>
+    <p class="author">
+      Started <%= distance_of_time_in_words Time.now, @execution.created_at %> ago by <%= link_to_user @execution.user %>
+    </p>
+  </div>
+</div>
+
+<table class="list">
+  <thead>
+    <tr>
+      <th>Case</th>
+      <th>Date</th>
+      <th>Status</th>
+      <th>Comment</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @execution.logs.each do |log| %>
+      <tr>
+        <td><%= link_to_case log.case %></td>
+        <td><%= time_tag(log.created_at)%></td>
+        <td class='status'><%= log_status(log) %></td>
+        <td><%= textilizable log.comment %></td>
+      </tr>
+    <% end %>
+    <% if not @execution.logs.any? %>
+      <tr class="empty"><td colspan="3">No logs</td></tr>
+    <% end %>
+  </tbody>
+</table>
+
+
+<% content_for :sidebar do %>
+  <%= render :partial => 'tests/sidebar' %>
+<% end %>

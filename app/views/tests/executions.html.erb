@@ -1,0 +1,31 @@
+<table class="list">
+	<thead>
+		<tr>
+			<th>Date</th>
+			<th>Suite</th>
+			<th>Tester</th>
+			<th>Statuses</th>
+			<th>Complete</th>
+		</tr>
+	</thead>
+	<tbody>
+		<% @executions.each do |execution| %>
+		<tr>
+			<td><%= time_tag(execution.created_at)%></td>
+			<td><%= link_to_suite execution.suite %></td>
+			<td class='user'><%= link_to_user execution.user %></td>
+			<td class='status'><%= link_to_execution execution %></td>
+			<td class='complete'><%= execution.next.nil? && 'Yes' || 'No' %></td>
+		</tr>
+		<% end %>
+		<% if not @executions.any? %>
+		<tr class="empty"><td colspan="5">No executions</td></tr>
+		<% end %>
+	</tbody>
+</table>
+
+<%= pagination_links_full @pages, @count %>
+
+<% content_for :sidebar do %>
+  <%= render :partial => 'tests/sidebar' %>
+<% end %>

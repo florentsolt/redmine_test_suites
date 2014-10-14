@@ -1,0 +1,75 @@
+<div class="contextual">
+  <% if not @suite.archived? %>
+    <% if @suite.executable? %>
+      <%= link_to "Run", {:action => :execute}, :class => 'icon icon-run' %>
+      <%= link_to "Disable", {:action => :disable}, :class => 'icon icon-disable' %>
+    <% else %>
+      <%= link_to "Enable", {:action => :enable}, :class => 'icon icon-checked' %>
+    <% end %>
+    <%= link_to l(:button_update), {:action => :edit}, :class => 'icon icon-edit' %>
+    <%= link_to "Associate", {:action => :associate}, :class => 'icon icon-link' %>
+    <%= link_to l(:button_archive), {:action => :archive}, :class => 'icon icon-lock' %>
+    <%= link_to l(:button_delete), {:action => :destroy}, :data => {:confirm => 'Are you sure ?'}, :class => 'icon icon-del' %>
+  <% else %>
+    <%= link_to l(:button_unarchive), {:action => :unarchive}, :class => 'icon icon-unlock' %>
+  <% end %>
+</div>
+
+<%= render :partial => 'show' %>
+
+<div class="splitcontentleft cases" id="associated">
+  <table class="list">
+    <thead>
+      <tr>
+        <th>Cases</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @suite.associations.any? %>
+        <% @suite.associations.each do |association| %>
+          <% if not association.case.nil? %>
+            <tr class="case" association="<%= association.id %>">
+              <td><%= link_to_case association.case %></td>
+            </tr>
+          <% elsif not association.nested_suite.nil? %>
+            <tr class="suite" association="<%= association.id %>">
+              <td><%= link_to_suite association.nested_suite %></td>
+            </tr>
+          <% end %>
+        <% end %>
+      <% else %>
+        <tr class="empty"><td>No cases</td></tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="splitcontentright" id="executions">
+  <table class="list">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Tester</th>
+        <th>Statuses</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @suite.last_executions.each do |execution| %>
+        <tr>
+          <td><%= time_tag(execution.created_at)%></td>
+          <td class='user'><%= link_to_user execution.user %></td>
+          <td class='status'><%= link_to_execution execution %></td>
+        </tr>
+      <% end %>
+      <% if not @suite.executions.any? %>
+        <tr class="empty"><td colspan="3">No executions</td></tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+
+<% content_for :sidebar do %>
+  <%= render :partial => 'tests/sidebar' %>
+<% end %>
+

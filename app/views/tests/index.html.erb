@@ -1,0 +1,52 @@
+<div class="splitcontentleft suites" id="suites">
+  <table class="list">
+    <thead>
+      <tr>
+        <th>
+          <%= searchable("suites") %>
+          Suites
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @suites.empty? %>
+        <tr class="empty"><td>No suites</td></tr>
+      <% end %>
+      <% @suites.each do |suite| %>
+        <tr class="searchable" data-index="<%= h suite.title.downcase %>">
+          <td>
+            <%= link_to_suite suite %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<div class="splitcontentright cases" id="cases">
+  <table class="list">
+    <thead>
+      <tr>
+        <th>
+          <%= searchable("cases") %>
+          Cases
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <% if @cases.empty? %>
+        <tr class="empty"><td>No cases</td></tr>
+      <% end %>
+      <% @cases.each do |kase| %>
+        <tr class="case searchable" data-index="<%= h kase.title.downcase %>">
+          <td><%= link_to_case kase %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+</div>
+
+<% content_for :sidebar do %>
+  <%= render :partial => 'sidebar' %>
+<% end %>
+

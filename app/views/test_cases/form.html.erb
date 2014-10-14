@@ -1,0 +1,42 @@
+<% if params[:action] == 'new' %>
+  <h2>New case</h2>
+<% else %>
+  <h2>Edit case</h2>
+<% end %>
+
+<%= error_messages_for @case %>
+
+<%= labelled_form_for @case, :url => {:action => params["action"] == 'new' ? :create : :update}, :html => {:id => 'case-form', :multipart => true} do |f| %>
+  <div class="box tabular">
+    <%= f.hidden_field :id %>
+    <p><%= f.text_field :title, :label => "Title" %></p>
+
+    <p><%= f.text_area :description, :label => "Description"%></p>
+    <%= wikitoolbar_for 'test_case_description' %>
+
+    <p><%= f.text_area :preconditions, :label => "Preconditions"%></p>
+    <%= wikitoolbar_for 'test_case_preconditions' %>
+
+    <p><%= f.text_area :steps, :label => "Steps"%></p>
+    <%= wikitoolbar_for 'test_case_steps' %>
+
+    <p><%= f.text_area :postconditions, :label => "Postconditions"%></p>
+    <%= wikitoolbar_for 'test_case_postconditions' %>
+  </div>
+
+  <fieldset><legend><%= l(:label_attachment_plural) %></legend>
+    <p><%= render :partial => 'attachments/form', :locals => {:container => @case} %></p>
+  </fieldset>
+
+  <br/>
+
+  <% if params[:action] == 'new' %>
+  <%= f.submit 'Create' %>
+  <% else %>
+  <%= f.submit 'Save' %>
+  <% end %>
+  <%= preview_link url_for(:action => :preview), 'case-form' %>
+
+<% end %>
+
+<div id="preview" class="wiki"></div>

@@ -1,0 +1,33 @@
+<table class="list">
+	<thead>
+		<tr>
+			<th>Date</th>
+			<th>Suite</th>
+			<th>Tester</th>
+			<th>Case</th>
+			<th>Status</th>
+			<th>Comment</th>
+		</tr>
+	</thead>
+	<tbody>
+    <% @logs.each do |log| %>
+      <tr>
+      	<td><%= time_tag(log.created_at)%></td>
+      	<td><%= link_to_suite log.suite %></td>
+      	<td class='user'><%= link_to_user log.user %></td>
+        <td><%= link_to_case log.case %></td>
+        <td class='status'><%= log_status(log) %></td>
+        <td><%= textilizable log.comment %></td>
+      </tr>
+    <% end %>
+    <% if not @logs.any? %>
+      <tr class="empty"><td colspan="6">No logs</td></tr>
+    <% end %>
+  </tbody>
+</table>
+
+<%= pagination_links_full @pages, @count %>
+
+<% content_for :sidebar do %>
+  <%= render :partial => 'tests/sidebar' %>
+<% end %>

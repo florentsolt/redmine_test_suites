@@ -1,0 +1,22 @@
+<% if params[:action] == 'new' %>
+  <h2>New suite</h2>
+<% else %>
+  <h2>Edit suite</h2>
+<% end %>
+
+<%= error_messages_for @suite %>
+
+<%= labelled_form_for @suite, :url => { :action => params["action"] == 'new' ? :create : :update } do |f| %>
+  <div class="box tabular">
+    <%= f.hidden_field :id %>
+    <p><%= f.text_field :title, :label => "Title" %></p>
+  </div>
+
+  <% if params[:action] == 'new' %>
+  <%= f.submit 'Create' %>
+  <% else %>
+  <%= f.submit 'Save' %>
+  <% end %>
+
+<% end %>
+

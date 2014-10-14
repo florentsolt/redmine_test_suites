@@ -1,0 +1,10 @@
+<div class="contextual">
+<%= link_to l(:button_update), {:action => :edit}, :class => 'icon icon-edit' %>
+<%= link_to l(:button_delete), {:action => :destroy}, :data => {:confirm => 'Are you sure ?'}, :class => 'icon icon-del' %>
+</div>
+
+<%= render :partial => 'show' %>
+
+<% content_for :sidebar do %>
+  <%= render :partial => 'tests/sidebar' %>
+<% end %>

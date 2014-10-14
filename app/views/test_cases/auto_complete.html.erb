@@ -1,0 +1,7 @@
+<%= raw @cases.map {|kase| {
+      'id' => kase.id,
+      'label' => "##{kase.id}: #{truncate kase.title.to_s, :length => 60}",
+      'value' => kase.id
+      }
+    }.to_json
+%>

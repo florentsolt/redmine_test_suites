@@ -1,0 +1,96 @@
+<h2>Case #<%= h @case.id %></h2>
+
+<div class="issue details">
+  <div class="subject">
+    <h3><%= h @case.title %></h3>
+    <p class="author">
+      <%= authoring @case.created_at, @case.user %>.
+    </p>
+  </div>
+
+  <% if @case.description? %>
+    <hr>
+    <p><strong>Description</strong></p>
+    <div class="wiki">
+      <%= textilizable @case.description, :attachments => @case.attachments %>
+    </div>
+  <% end %>
+
+  <% if @case.preconditions? %>
+    <hr>
+    <p><strong>Preconditions</strong></p>
+    <div class="wiki">
+      <%= textilizable @case.preconditions, :attachments => @case.attachments %>
+    </div>
+  <% end %>
+
+  <% if @case.steps? %>
+    <hr>
+    <p><strong>Steps</strong></p>
+    <div class="wiki">
+      <%= textilizable @case.steps, :attachments => @case.attachments %>
+    </div>
+  <% end %>
+
+  <% if @case.postconditions? %>
+    <hr>
+    <p><strong>Postconditions</strong></p>
+    <div class="wiki">
+      <%= textilizable @case.postconditions, :attachments => @case.attachments %>
+    </div>
+  <% end %>
+
+  <% if @case.attachments.any? %>
+    <hr>
+    <%= link_to_attachments @case, :thumbnails => true %>
+  <% end %>
+
+  <hr>
+  <div class="contextual">
+    <%= toggle_link l(:button_add), 'new-relation-form', {:focus => 'issue_id'} %>
+  </div>
+
+  <p><strong><%=l(:label_related_issues)%></strong></p>
+
+  <div id="relations">
+    <%= render :partial => 'issues' %>
+  </div>
+
+  <%= form_tag(url_for(:action => :issue), {:remote => true, :method => :post, :id => 'new-relation-form', :style => 'display:none'}) do %>
+    <%= hidden_field_tag :case_id, @case.id %>
+    <%= hidden_field_tag :mode, 'issue' %>
+    <%= l(:label_issue) %> #<%= text_field_tag :issue_id, '', :size => 10 %>
+    <%= submit_tag l(:button_add) %>
+    <%= link_to_function l(:button_cancel), '$("#new-relation-form").hide();'%>
+    <%= javascript_tag "observeAutocompleteField('issue_id', '#{escape_javascript auto_complete_issues_path(:scope => 'all')}')" %>
+  <% end %>
+</div>
+
+<br>
+
+<table class="list">
+  <thead>
+    <tr>
+      <th>Date</th>
+      <th>Suite</th>
+      <th>Tester</th>
+      <th>Status</th>
+      <th>Comment</th>
+    </tr>
+  </thead>
+  <tbody>
+    <% @case.last_logs.each do |log| %>
+      <tr>
+        <td><%= time_tag(log.created_at)%></td>
+        <td><%= log.suite && link_to_suite(log.suite)%></td>
+        <td class='user'><%= link_to_user log.user %></td>
+        <td class='status'><%= log_status(log) %></td>
+        <td><%= textilizable log.comment %></td>
+      </tr>
+    <% end %>
+    <% if not @case.last_logs.any? %>
+      <tr class="empty"><td colspan="5">No logs</td></tr>
+    <% end %>
+  </tbody>
+</table>
+

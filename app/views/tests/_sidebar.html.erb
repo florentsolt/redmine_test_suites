@@ -1,0 +1,21 @@
+  <h3>Tests</h3>
+
+  <% if params[:action] == 'index' and params[:controller] == 'tests' %>
+    <%= form_tag({}, :method => :get) do %>
+      <label for="archived"><%= check_box_tag 'archived', 1, params[:archived] %> Show archived suites</label>
+      <br/>
+      <label for="only_executable"><%= check_box_tag 'only_executable', 1, params[:only_executable] %> Hide non-executable suites</label>
+      <p><%= submit_tag l(:button_apply), :class => 'button-small', :name => nil %></p>
+      <hr>
+    <% end %>
+
+  <% else %>
+    <p><%= link_to 'All tests', {:action => :index, :controller => :tests}, :class => 'icon icon-list' %></p>
+  <% end %>
+  <p><%= link_to 'New suite', {:action => :new, :controller => :test_suites}, :class => 'icon icon-add' %></p>
+  <p><%= link_to 'New case', {:action => :new, :controller => :test_cases}, :class => 'icon icon-add' %></p>
+
+  <h3>History</h3>
+  <p><%= link_to 'Last executions', {:action => :executions, :controller => :tests}, :class => 'icon icon-report' %></p>
+  <p><%= link_to 'Last logs', {:action => :logs, :controller => :tests}, :class => 'icon icon-report' %></p>
+

@@ -1,0 +1,23 @@
+<table class="list">
+  <tbody>
+    <% if tab[:data].any? %>
+      <% tab[:data].each do |item| %>
+          <% case item.class.to_s %>
+          <% when "TestCase" %>
+            <tr class="case searchable" data-index="<%= h item.title.downcase %>">
+              <td><%= link_to_case item %></td>
+              <td class="associate"><%= link_to "Associate", {:action => :associate, :id => @suite.id, :case => item.id}, :class => "icon icon-link" %></td>
+            </tr>
+          <% when "TestSuite" %>
+            <tr class="suite searchable" data-index="<%= h item.title.downcase%>">
+              <td><%= link_to_suite item %></td>
+              <td class="associate"><%= link_to "Associate", {:action => :associate, :id => @suite.id, :suite => item.id}, :class => "icon icon-link" %></td>
+            </tr>
+          <% end %>
+      <% end %>
+    <% else %>
+      <tr class="empty"><td colspan="2">No cases</td></tr>
+    <% end %>
+  </tbody>
+</table>
+

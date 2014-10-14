@@ -1,0 +1,43 @@
+<div class="issue details">
+  <div class="subject">
+    <h3><%= h @case.title %></h3>
+  </div>
+
+  <% if @case.description? %>
+    <hr>
+    <p><strong>Description</strong></p>
+    <div class="wiki">
+      <%= textilizable @case.description, :attachments => @case.attachments %>
+    </div>
+  <% end %>
+
+  <% if @case.preconditions? %>
+    <hr>
+    <p><strong>Preconditions</strong></p>
+    <div class="wiki">
+      <%= textilizable @case.preconditions, :attachments => @case.attachments %>
+    </div>
+  <% end %>
+
+  <% if @case.steps? %>
+    <hr>
+    <p><strong>Steps</strong></p>
+    <div class="wiki">
+      <%= textilizable @case.steps, :attachments => @case.attachments %>
+    </div>
+  <% end %>
+
+  <% if @case.postconditions? %>
+    <hr>
+    <p><strong>Postconditions</strong></p>
+    <div class="wiki">
+      <%= textilizable @case.postconditions, :attachments => @case.attachments %>
+    </div>
+  <% end %>
+
+  <% if @case.attachments.any? %>
+    <hr>
+    <%= link_to_attachments @case, :thumbnails => true %>
+  <% end %>
+</div>
+
