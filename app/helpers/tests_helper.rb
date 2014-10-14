@@ -18,15 +18,18 @@ module TestsHelper
   end
 
   def link_to_suite(suite)
+    return if suite.nil?
     klass = 'icon ' + ((suite.archived? && 'icon-lock') || (suite.executable? && 'icon-folder-open') || 'icon-folder')
     link_to "##{suite.id} #{suite.title}", {:action => :show, :controller => :test_suites, :id => suite.id}, :class => klass
   end
 
   def link_to_case(kase)
+    return if kase.nil?
     link_to "##{kase.id} #{kase.title}", {:action => :show, :controller => :test_cases, :id => kase.id}, :class => "icon icon-bolt"
   end
 
   def link_to_execution(execution)
+    return if execution.nil?
     url = url_for :controller => :test_executions, :action => :show, :id => execution.id
     ("<a href='#{url}'>" +
     execution.statuses.map do |id, cases|
@@ -36,6 +39,7 @@ module TestsHelper
   end
 
   def log_status(log)
+    return if log.nil?
     klass = TestLog::STATUS[log.status].parameterize
     "<strong class='#{klass}'>#{TestLog::STATUS[log.status]}</strong>".html_safe
   end

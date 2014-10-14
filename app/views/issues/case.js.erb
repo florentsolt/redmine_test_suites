@@ -1,0 +1,8 @@
+$('#cases').html('<%= escape_javascript(render :partial => 'issues/case_list') %>');
+<% if not @case.nil? %>
+  $('#case_id').blur();
+  $('#case_id').val('');
+  $('#case_id').focus();
+<% end %>
+
+

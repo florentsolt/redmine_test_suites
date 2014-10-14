@@ -58,6 +58,9 @@
 .icon-folder-open { background-image: url(../../../images/folder_open.png); }
 .icon-merge { background-image: url(../images/page_add.png); }
 
+.controller-issues table.cases {
+    border: none;
+}
 
 .controller-tests td.status,
 .controller-tests td.complete,

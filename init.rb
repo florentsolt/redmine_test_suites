@@ -28,6 +28,7 @@ Redmine::Plugin.register :redmine_test_suites do
 
 end
 
+# Add relation between models: Issue <-> TestCase
 module TestSuites_IssuePatch
   def self.included(base)
     base.class_eval do
@@ -35,15 +36,29 @@ module TestSuites_IssuePatch
     end
   end
 end
-
 require_dependency "issue"
 Issue.send(:include, TestSuites_IssuePatch)
 
-class TestSuitesViewListener < ::Redmine::Hook::ViewListener
 
-  # Adds javascript and stylesheet tags
+# Add test helpers in IssueController for partial views
+module TestSuites_IssuesControllerPatch
+  def self.included(base)
+    base.class_eval do
+      helper :tests
+    end
+  end
+end
+require_dependency "issues_controller"
+IssuesController.send(:include, TestSuites_IssuesControllerPatch)
+
+# Add javascript and stylesheet tags
+class TestSuitesViewListener < ::Redmine::Hook::ViewListener
   def view_layouts_base_html_head(context)
     stylesheet_link_tag("test_suites.css", :plugin => "redmine_test_suites", :media => "screen")
   end
+end
 
+# Render case list in issue
+class TestSuitesViewListener < ::Redmine::Hook::ViewListener
+  render_on(:view_issues_show_description_bottom, :partial => 'issues/cases')
 end

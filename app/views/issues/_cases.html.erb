@@ -1,0 +1,20 @@
+<hr>
+
+<div class="contextual">
+  <%= toggle_link l(:button_add), 'new-case-form', {:focus => 'case_id'} %>
+</div>
+
+<p><strong>Test Cases</strong></p>
+
+<div id="cases">
+  <%= render :partial => 'case_list' %>
+</div>
+
+<%= form_tag(url_for(:controller => :test_cases, :action => :issue), {:remote => true, :method => :post, :id => 'new-case-form', :style => 'display:none'}) do %>
+  <%= hidden_field_tag :issue_id, @issue.id %>
+  <%= hidden_field_tag :mode, 'case' %>
+  Case #<%= text_field_tag :case_id, '', :size => 10 %>
+  <%= submit_tag l(:button_add) %>
+  <%= link_to_function l(:button_cancel), '$("#new-case-form").hide();'%>
+  <%= javascript_tag "observeAutocompleteField('case_id', '#{escape_javascript url_for(:controller => :test_cases, :action => :auto_complete, :scope => 'all')}')" %>
+<% end %>
