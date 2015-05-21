@@ -1,7 +1,7 @@
 class TestExecution < ActiveRecord::Base
   belongs_to :user
   belongs_to :suite, :class_name => 'TestSuite', :foreign_key => 'test_suite_id'
-  has_many :logs, :class_name => 'TestLog', :order => 'test_logs.created_at ASC'
+  has_many :logs, ->{order('test_logs.created_at ASC')}, :class_name => 'TestLog'
 
   def case?(kase)
     self.suite.cases.include? kase

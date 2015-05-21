@@ -32,7 +32,7 @@ end
 module TestSuites_IssuePatch
   def self.included(base)
     base.class_eval do
-      has_and_belongs_to_many :cases, :class_name => 'TestCase', :join_table => :test_issues, :order => 'test_issues.created_at ASC'
+      has_and_belongs_to_many :cases, -> { order 'test_issues.created_at ASC' }, :class_name => 'TestCase', :join_table => :test_issues
     end
   end
 end
