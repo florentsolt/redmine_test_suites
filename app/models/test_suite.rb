@@ -1,9 +1,9 @@
 class TestSuite < ActiveRecord::Base
   include Redmine::SafeAttributes
 
-  has_many :associations, :class_name => 'TestAssociation', :order => 'test_associations.`order` ASC', :include => [:case, :nested_suite]
-  has_many :executions, :class_name => 'TestExecution', :order => 'test_executions.created_at DESC'
-  has_many :last_executions, :class_name => "TestExecution", :limit => 10, :order => 'test_executions.created_at DESC', :include => :logs
+  has_many :associations, -> { order('test_associations.`order` ASC').includes(:case, :nested_suite) }, :class_name => 'TestAssociation'
+  has_many :executions, -> { order('test_executions.created_at DESC') }, :class_name => 'TestExecution'
+  has_many :last_executions, -> { order('test_executions.created_at DESC').includes(:logs).limit(10) }, :class_name => "TestExecution"
   belongs_to :user
 
   safe_attributes 'title'

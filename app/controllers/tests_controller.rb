@@ -6,8 +6,8 @@ class TestsController < ApplicationController
     conditions = {:archived => false}
     conditions.delete :archived  if params[:archived]
     conditions[:executable] = true if params[:only_executable]
-    @suites = TestSuite.find(:all, :conditions => conditions, :order => 'title ASC')
-    @cases = TestCase.find(:all, :order => 'title ASC')
+    @suites = TestSuite.where(conditions).order('title ASC')
+    @cases = TestCase.order('title ASC')
   end
 
   def logs
